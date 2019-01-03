@@ -1,4 +1,5 @@
 sfp-code-reflection/phpdoc/*
+sfp-code-reflection/src-build/*
 sfp-code-reflection/php_reflection.c
 vendor/*
 composer.lock

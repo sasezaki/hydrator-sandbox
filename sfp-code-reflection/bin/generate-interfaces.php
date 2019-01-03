@@ -8,15 +8,27 @@ require_once __DIR__ . '/functions.php';
 $ref = new ReflectionExtension('Reflection');
 $proto = analyse_proto(__DIR__ . '/../php_reflection.c');
 
+$parentMethods = get_parent_methods($ref);
+
+const NAMESPACE_NAME = 'Sfp\\Code\\Reflection\\Interfaces';
+
 
 /** @var ReflectionClass $class */
 foreach ($ref->getClasses() as $class) {
 
     $interfaceGenerator = new InterfaceGenerator;
-    $interfaceGenerator->setNamespaceName('Sfp\\Code\\Reflection\\Interfaces');
+    $interfaceGenerator->setNamespaceName(NAMESPACE_NAME);
     $interfaceGenerator->setName($class->getName() . 'Interface');
 
+    if (isset($parentMethods[$class->getName()])) {
+        $parentInterface = sprintf('%s\\%sInterface', NAMESPACE_NAME, $parentMethods[$class->getName()]['__PARENT_CLASS__']);
+        $interfaceGenerator->setImplementedInterfaces([$parentInterface]);
+    }
+
     foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+        if (isset($parentMethods[$class->getName()]) && in_array($method->getName(), $parentMethods[$class->getName()])) {
+            continue;
+        }
 
         $methodReflection = new Zend\Code\Reflection\MethodReflection($class->getName(), $method->getName());
         $methodGenerator = MethodGenerator::fromReflection($methodReflection);
@@ -41,4 +53,22 @@ foreach ($ref->getClasses() as $class) {
     }
 
     echo $interfaceGenerator->generate();
+}
+
+function get_parent_methods(ReflectionExtension $ref) {
+
+    $parentMethods = [];
+    foreach ($ref->getClasses() as $class) {
+        /** @var ReflectionClass $parent */
+        $parent = $class->getParentClass();
+        if ($parent === false) {
+            continue;
+        }
+        $parentMethods[$class->getName()]['__PARENT_CLASS__'] = $parent->getName();
+
+        foreach ($parent->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            $parentMethods[$class->getName()][] = $method->getName();
+        }
+    }
+    return $parentMethods;
 }

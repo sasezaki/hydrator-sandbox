@@ -1,9 +1,7 @@
 <?php
 namespace Sfp\Mapping\Rules;
 
-//use \ReflectionProperty;
-//use Roave\BetterReflection\Reflection\ReflectionProperty;
-use Sfp\Code\ReflectionInterfaces\ReflectionProperyInterface;
+//use Sfp\Code\Reflection\;
 
 interface ClassMetadataInterface
 {
