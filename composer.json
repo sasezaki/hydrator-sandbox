@@ -1,0 +1,15 @@
+{
+    "require": {
+        "zendframework/zend-hydrator": "^3.0",
+        "roave/better-reflection": "^3.2",
+        "psr/container": "^1.0",
+        "zendframework/zend-code": "^3.3"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sfp\\Code\\Reflection\\": "sfp-code-reflection/src",
+            "Sfp\\Code\\Reflection\\BetterReflection": "sfp-code-reflection-better-reflection/src",
+            "Sfp\\Mapping\\Rules\\": "sfp-mapping-rules/src"
+        }
+    }
+}

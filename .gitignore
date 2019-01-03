@@ -1,0 +1,5 @@
+sfp-code-reflection/phpdoc/*
+sfp-code-reflection/php_reflection.c
+vendor/*
+composer.lock
+.idea/*
