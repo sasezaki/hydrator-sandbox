@@ -2,10 +2,14 @@
 
 namespace Sfp\Code\Reflection\BetterReflection;
 
+use Exception;
 use Roave\BetterReflection\Reflector\Reflector;
-use \phpDocumentor\Reflection\Type;
+use Roave\BetterReflection\Reflection\ReflectionType as RoaveReflectionType;
+use phpDocumentor\Reflection\Type;
+use Sfp\Code\Reflection\ReflectionTypeInterface;
+use Sfp\Code\Reflection\TypePropertyInterface;
 
-final class TypeProperty
+final class TypeProperty implements TypePropertyInterface
 {
     /** @var Type */
     private $type;
@@ -22,7 +26,10 @@ final class TypeProperty
         $this->allowsNull = $allowsNull;
     }
 
-    public function getType() : ReflectionTypeInterface
+    /**
+     * @throws Exception
+     */
+    public function getType() : ?ReflectionTypeInterface
     {
         if (!$this->type instanceof Type) {
             throw new Exception();

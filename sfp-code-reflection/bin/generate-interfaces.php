@@ -7,6 +7,7 @@ require_once __DIR__ . '/functions.php';
 
 $ref = new ReflectionExtension('Reflection');
 $proto = analyse_proto(__DIR__ . '/../php_reflection.c');
+$build_dir = __DIR__ . '/../src-build';
 
 $parentMethods = get_parent_methods($ref);
 
@@ -41,6 +42,9 @@ foreach ($ref->getClasses() as $class) {
                     if ($returnType === 'stdclass') {
                         $returnType = '\\stdClass';
                     }
+                    if ($returnType === 'mixed') {
+                        continue;
+                    }
                     $methodGenerator->setReturnType($returnType);
                 }
             }
@@ -52,7 +56,10 @@ foreach ($ref->getClasses() as $class) {
         $interfaceGenerator->addMethodFromGenerator($methodGenerator);
     }
 
-    echo $interfaceGenerator->generate();
+    $file = $build_dir . DIRECTORY_SEPARATOR . $interfaceGenerator->getName() . '.php';
+    touch($file);
+    file_put_contents($file, '<?php' . "\n");
+    file_put_contents($file, $interfaceGenerator->generate(), FILE_APPEND);
 }
 
 function get_parent_methods(ReflectionExtension $ref) {
