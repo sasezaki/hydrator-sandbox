@@ -1,10 +1,16 @@
 <?php
+
 use Zend\Hydrator\ReflectionHydrator;
 
-use Sfp\ReflectionInterfaces\ {
-    ClassMetadataInterface, ClassMetadataManagerInterface
-};
+interface ClassMetadataInterface
+{
+    public function getProperty(string $name) : \Roave\BetterReflection\Reflection\ReflectionProperty;
+}
 
+interface ClassMetadataManagerInterface
+{
+    public function getClassMetadata(string $class) : ClassMetadataInterface;
+}
 
 class Hydrator
 {
@@ -44,8 +50,7 @@ class Hydrator
             return new \Zend\Hydrator\Strategy\DateTimeFormatterStrategy('Y/m/d H:i:s');
         }
 
-        // unknown
-        // var_dump($className);
+        var_dump($className);
     }
 }
 
