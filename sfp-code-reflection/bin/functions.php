@@ -1,6 +1,6 @@
 <?php
 
-function analyse_proto(string $file) {
+function analyse_proto(string $file) : array {
 
     $fp = fopen($file, 'r');
     $protoline = preg_quote('/* {{{ proto public ');
@@ -13,7 +13,7 @@ function analyse_proto(string $file) {
 
         if ($matched) {
             $methods[$m['class']][$m['method']]['return'] = $m['return'];
-            $methods[$m['class']][$m['method']]['returnArray'] = isset($m['returnArray']);
+            $methods[$m['class']][$m['method']]['returnArray'] = ($m['returnArray'] === '[]');
 
             if (!empty($m['parameterType'])) {
                 $methods[$m['class']][$m['method']]['parameterType'] = $m['parameterType'];
@@ -33,4 +33,8 @@ function analyse_proto(string $file) {
         $prev_matched = $matched;
     }
     return $methods;
+}
+
+function filter_proto(array $methods) {
+
 }
